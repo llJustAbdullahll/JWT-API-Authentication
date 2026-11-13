@@ -43,10 +43,22 @@ class AuthController extends Controller
 
         if($user) {
             $token = Auth::login($user);
-            
+
             return response()->json(['user' => $user, 'token' => $token], 201);
         }
     
         return response()->json(['message' => 'Registration failed'], 500);
+    }
+
+    public function logout(Request $request){
+
+        Auth::guard('api')->logout();
+        
+        return response()->json(['message' => 'Successfully logged out'], 200);
+    }
+    public function refresh(Request $request){
+        $newToken = Auth::refresh();
+
+        return response()->json(['token' => $newToken]);
     }
 }
